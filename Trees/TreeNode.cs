@@ -10,12 +10,13 @@ namespace Trees
         private T Value;
         //TODO #1: Declare a member variable called "Children" as a list of TreeNode<T> objects
         List<TreeNode<T>> Children;
-        
+
 
         public TreeNode(T value)
         {
             //TODO #2: Initialize member variables/attributes
-            Value=value;
+            Value = value;
+            Children = new List<TreeNode<T>>();
         }
 
         public string ToString(int depth, int index)
@@ -42,7 +43,6 @@ namespace Trees
         public TreeNode<T> Add(T value)
         {
             //TODO #4: Add a new instance of class TreeNode<T> with Value=value. Return the instance we just created
-
             TreeNode<T> tree=new TreeNode<T>(value);
             Children.Add(tree);
             return tree;
@@ -52,22 +52,34 @@ namespace Trees
         public int Count()
         {
             //TODO #5: Return the total number of elements in this tree
-            
-            return 0;
-            
+            int contador = 1;
+            for (int i = 0; i < Children.Count(); i++)
+            {
+                contador=contador+Children.Get(i).Count();
+            }
+            return contador;
         }
 
         public int Height()
         {
             //TODO #6: Return the height of this tree
-            
-            return 0;
+            int newHeight = 0;
+            if (Value == null)
+            {
+                return -1;
+            }
+            else if (Children.Count() == 0)
+            {
+                return 0;
+            }
+            else
+            { 
+                
+            }
+            return newHeight;
             
         }
 
-        
-
-        
         public void Remove(T value)
         {
             //TODO #7: Remove the child node that has Value=value. Apply recursively
