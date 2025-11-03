@@ -1,5 +1,6 @@
 
 using System;
+using System.Runtime.CompilerServices;
 using System.Windows.Markup;
 using Lists;
 
@@ -64,17 +65,21 @@ namespace Trees
         {
             //TODO #6: Return the height of this tree
             int newHeight = 0;
-            if (Value == null)
+            if (this.Count() == 0)
             {
                 return -1;
             }
-            else if (Children.Count() == 0)
+            else if (this.Count() == 1)
             {
                 return 0;
             }
             else
-            { 
-                
+            {
+                for (int i = 0; i < Children.Count(); i++)
+                {
+                    int parcialHeight = Children.Get(i).Height();
+                    newHeight = 1 + parcialHeight;
+                }
             }
             return newHeight;
             
@@ -83,13 +88,36 @@ namespace Trees
         public void Remove(T value)
         {
             //TODO #7: Remove the child node that has Value=value. Apply recursively
-            
+            for (int i = 0; i < Children.Count(); i++)
+            {
+                if (Children.Get(i).Value.Equals(value))
+                {
+                    Children.Remove(i);
+                }
+                else
+                {
+                    Children.Get(i).Remove(value);
+                }
+                
+            }
         }
 
         public TreeNode<T> Find(T value)
         {
             //TODO #8: Return the node that contains this value (it might be this node or a child). Apply recursively
-            
+            TreeNode<T> newNode;
+            if (Value.Equals(value))
+            {
+                return this;
+            }
+            for (int i = 0; i < Children.Count(); i++)
+            {
+                newNode = Children.Get(i).Find(value);
+                if (newNode != null)
+                {
+                    return newNode;
+                }
+            }
             return null;
         }
 
@@ -97,7 +125,8 @@ namespace Trees
         public void Remove(TreeNode<T> node)
         {
             //TODO #9: Same as #6, but this method is given the specific node to remove, not the value
-            
+            T newValue = node.Value;
+            Remove(newValue);
         }
     }
 }
