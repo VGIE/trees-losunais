@@ -1,5 +1,6 @@
 
 using System;
+using System.Formats.Asn1;
 namespace BinaryTrees
 {
     public class BinaryTreeNode<TKey, TValue> where TKey : IComparable<TKey>
@@ -12,7 +13,8 @@ namespace BinaryTrees
         public BinaryTreeNode(TKey key, TValue value)
         {
             //TODO #1: Initialize member variables/attributes
-            
+            Key = key;
+            Value = value;
         }
 
         public string ToString(int depth)
@@ -43,22 +45,92 @@ namespace BinaryTrees
             //              b) Else, we should ask the LeftChild to add it recursively
             //          -If the current node has a lower key that the new node (use CompareTo()), the new node should be on this node's right side.
             //          -If the current node and the new node have the same key, just update this node's value with the new node's value
-            
+            if (this.Key.CompareTo(node.Key) < 0)
+            {
+                if (RightChild == null)
+                {
+                    RightChild= node;
+                }
+                else
+                {
+                    RightChild.Add(node);
+                }        
+            }
+            else if (this.Key.CompareTo(node.Key) > 0)
+            {
+                if (LeftChild == null)
+                {
+                    LeftChild = node;
+                }
+                else
+                {
+                    LeftChild.Add(node);
+                }
+            }
+            else
+            {
+                this.Value = node.Value;
+            }
         }
 
         public int Count()
         {
             //TODO #3: Return the total number of elements in this tree
+            int contador = 1;
             
-            return 0;
+            if (RightChild != null && LeftChild != null)
+            {
+                 contador = contador + RightChild.Count() + LeftChild.Count();
+
+            }
+            else if (RightChild == null && LeftChild != null)
+            {
+                 contador = contador + LeftChild.Count();
+            }
+            else if(RightChild != null && LeftChild == null)
+            {
+                contador = contador + RightChild.Count();
+            }
+            
+            return contador;
+           
             
         }
 
         public int Height()
         {
             //TODO #4: Return the height of this tree
-            
-            return 0;
+            int newHeight = 0;
+            int newHeightRight = 0;
+            int newHeightLeft = 0;
+            if (this.Count() == 0)
+            {
+                return -1;
+            }
+            else if (this.Count() == 1)
+            {
+                return 0;
+            }
+            else
+            {
+                if (RightChild != null)
+                {
+                    newHeightRight = 1 + RightChild.Height();
+                }
+                if (LeftChild != null)
+                {
+                    newHeightLeft = 1 + LeftChild.Height();
+                }
+                if (newHeightLeft > newHeightRight)
+                {
+                    newHeight = newHeightLeft;
+                }
+                else
+                {
+                    newHeight = newHeightRight;
+                }
+            }
+            return newHeight;
             
         }
 
@@ -70,9 +142,33 @@ namespace BinaryTrees
             //              b) Else, we should ask the LeftChild to find the node recursively. It must be below LeftChild
             //          -If the current node has a lower key that the new node (use CompareTo()), the key should be on this node's right side.
             //          -If the current node and the new node have the same key, just return this node's value. We found it
-            
+            if (this.Key.CompareTo(key) < 0)
+            {
+                if (LeftChild == null)
+                {
+                    return default;
+                }
+                else
+                {
+                    LeftChild.Get(Key);
+                }
+            }
+            else if (this.Key.CompareTo(key) > 0)
+            {
+                if (RightChild == null)
+                {
+                    return default;
+                }
+                else
+                {
+                    return RightChild.Get(Key);
+                }
+            }
+            else
+            {
+                return this.Value;
+            }
             return default;
-            
         }
 
         
