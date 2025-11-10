@@ -142,7 +142,7 @@ namespace BinaryTrees
             //              b) Else, we should ask the LeftChild to find the node recursively. It must be below LeftChild
             //          -If the current node has a lower key that the new node (use CompareTo()), the key should be on this node's right side.
             //          -If the current node and the new node have the same key, just return this node's value. We found it
-            if (this.Key.CompareTo(key) < 0)
+            if (this.Key.CompareTo(key) > 0)
             {
                 if (LeftChild == null)
                 {
@@ -150,10 +150,10 @@ namespace BinaryTrees
                 }
                 else
                 {
-                    LeftChild.Get(Key);
+                    return LeftChild.Get(key);
                 }
             }
-            else if (this.Key.CompareTo(key) > 0)
+            else if (this.Key.CompareTo(key) < 0)
             {
                 if (RightChild == null)
                 {
@@ -161,14 +161,14 @@ namespace BinaryTrees
                 }
                 else
                 {
-                    return RightChild.Get(Key);
+                    return RightChild.Get(key);
                 }
             }
             else
             {
                 return this.Value;
             }
-            return default;
+            
         }
 
         
@@ -179,8 +179,54 @@ namespace BinaryTrees
             //so this method returns the node with which this node needs to be replaced. If this node isn't the
             //one we are looking for, we will return this, so that the parent node can replace LeftChild/RightChild
             //with the same node it had.
-            
-            return null;
+            if (RightChild.Equals(key))
+            {
+                RightChild.Remove(key);
+                if (RightChild.RightChild == null && RightChild.LeftChild != null)
+                {
+                    RightChild = RightChild.LeftChild;
+                }
+                else if (RightChild.RightChild != null && RightChild.LeftChild == null)
+                {
+                    RightChild = RightChild.RightChild;
+                }
+                else if (RightChild.RightChild == null && RightChild.LeftChild == null)
+                {
+                    RightChild = null;
+                }
+                else
+                {
+                    RightChild.RightChild.Add(LeftChild);
+                    RightChild = RightChild.RightChild;
+                }
+                return RightChild;
+            }
+            else if (LeftChild.Equals(key))
+            {
+                LeftChild.Remove(key);
+                if (LeftChild.RightChild == null && LeftChild.LeftChild != null)
+                {
+                    LeftChild = LeftChild.LeftChild;
+                }
+                else if (LeftChild.RightChild != null && LeftChild.LeftChild == null)
+                {
+                    LeftChild = LeftChild.RightChild;
+                }
+                else if (LeftChild.RightChild == null && LeftChild.LeftChild == null)
+                {
+                    LeftChild = null;
+                }
+                else
+                {
+                    LeftChild.LeftChild.Add(RightChild);
+                    LeftChild= LeftChild.LeftChild;
+                }
+                return LeftChild;
+            }
+            else
+            {
+                return this;
+            }
             
         }
 
