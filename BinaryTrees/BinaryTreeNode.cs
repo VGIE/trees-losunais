@@ -179,55 +179,35 @@ namespace BinaryTrees
             //so this method returns the node with which this node needs to be replaced. If this node isn't the
             //one we are looking for, we will return this, so that the parent node can replace LeftChild/RightChild
             //with the same node it had.
-            if (RightChild.Equals(key))
+            if (this.Key.CompareTo(key) == 0)
+            {
+                if (RightChild == null && LeftChild == null)
+                {
+                    return null;
+                }
+                else if (RightChild != null && LeftChild == null)
+                {
+                    return RightChild;
+                }
+                else if (RightChild == null && LeftChild != null)
+                {
+                    return LeftChild;
+                }
+                else
+                {
+                    LeftChild.Add(RightChild);
+                    return LeftChild;
+                }
+            }
+            else if (this.Key.CompareTo(key) < 0)
             {
                 RightChild.Remove(key);
-                if (RightChild.RightChild == null && RightChild.LeftChild != null)
-                {
-                    RightChild = RightChild.LeftChild;
-                }
-                else if (RightChild.RightChild != null && RightChild.LeftChild == null)
-                {
-                    RightChild = RightChild.RightChild;
-                }
-                else if (RightChild.RightChild == null && RightChild.LeftChild == null)
-                {
-                    RightChild = null;
-                }
-                else
-                {
-                    RightChild.RightChild.Add(LeftChild);
-                    RightChild = RightChild.RightChild;
-                }
-                return RightChild;
             }
-            else if (LeftChild.Equals(key))
+            else if (this.Key.CompareTo(key) > 0)
             {
                 LeftChild.Remove(key);
-                if (LeftChild.RightChild == null && LeftChild.LeftChild != null)
-                {
-                    LeftChild = LeftChild.LeftChild;
-                }
-                else if (LeftChild.RightChild != null && LeftChild.LeftChild == null)
-                {
-                    LeftChild = LeftChild.RightChild;
-                }
-                else if (LeftChild.RightChild == null && LeftChild.LeftChild == null)
-                {
-                    LeftChild = null;
-                }
-                else
-                {
-                    LeftChild.LeftChild.Add(RightChild);
-                    LeftChild= LeftChild.LeftChild;
-                }
-                return LeftChild;
             }
-            else
-            {
-                return this;
-            }
-            
+            return this;    
         }
 
         public int KeysToArray(TKey[] keys, int index)
