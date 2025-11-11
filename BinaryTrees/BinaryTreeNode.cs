@@ -179,35 +179,55 @@ namespace BinaryTrees
             //so this method returns the node with which this node needs to be replaced. If this node isn't the
             //one we are looking for, we will return this, so that the parent node can replace LeftChild/RightChild
             //with the same node it had.
-            if (this.Key.CompareTo(key) == 0)
-            {
+            int value = this.Key.CompareTo(key);
+            
+            if (value == 0){
                 if (RightChild == null && LeftChild == null)
                 {
                     return null;
                 }
-                else if (RightChild != null && LeftChild == null)
+                else if (LeftChild == null)
                 {
                     return RightChild;
                 }
-                else if (RightChild == null && LeftChild != null)
+                else if (RightChild == null)
                 {
                     return LeftChild;
                 }
                 else
                 {
-                    LeftChild.Add(RightChild);
-                    return LeftChild;
+                    RightChild.Add(LeftChild);
+                    return RightChild;
                 }
             }
-            else if (this.Key.CompareTo(key) < 0)
+            else if (value < 0)
             {
-                RightChild.Remove(key);
+                if (RightChild == null)
+                {
+                    return this;
+                }
+                else
+                {
+                    RightChild = RightChild.Remove(key);
+                    return this;
+                }
+
             }
-            else if (this.Key.CompareTo(key) > 0)
+            else if (value > 0)
             {
-                LeftChild.Remove(key);
+                if (LeftChild == null)
+                {
+                    return this;
+                }
+                else
+                {
+                    LeftChild = LeftChild.Remove(key);
+                    return this;
+                }
             }
-            return this;    
+            return this;
+            
+            
         }
 
         public int KeysToArray(TKey[] keys, int index)
